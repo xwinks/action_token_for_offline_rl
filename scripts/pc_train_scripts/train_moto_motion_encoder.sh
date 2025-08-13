@@ -1,7 +1,7 @@
-export CUDA_VISIBLE_DEVICES=1
+export CUDA_VISIBLE_DEVICES=0
 
 export PROJECT_ROOT=/home/v-wenhuitan/wenke_workspace/wenke_data/workspace/action_token_for_offline_rl
-export CONFIG_NAME="conv_debug"
+export CONFIG_NAME="debug"
 
 cd ${PROJECT_ROOT}/latent_motion_tokenizer
 accelerate launch --main_process_port 29501 train/lerobot_train_latent_motion_tokenizer.py --config_path "${PROJECT_ROOT}/latent_motion_tokenizer/configs/train/${CONFIG_NAME}.yaml"

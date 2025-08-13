@@ -328,6 +328,7 @@ class LatentMotionTokenizer_Trainer:
             cond_pixel_values=rgb_seq[:,0],
             target_pixel_values=rgb_seq[:,1]
         )
+        print("the loss is: ", loss)
 
         return loss
 

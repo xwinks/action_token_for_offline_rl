@@ -1,8 +1,8 @@
-latent_motion_tokenizer_config_path: "/home/v-wenhuitan/wenke_workspace/wenke_data/workspace/action_token_for_offline_rl/latent_motion_tokenizer/configs/models/conv_decoder_base.yaml"
-dataset_config_path: "/home/v-wenhuitan/wenke_workspace/wenke_data/workspace/action_token_for_offline_rl/latent_motion_tokenizer/configs/data/pizza.yaml"
+latent_motion_tokenizer_config_path: "configs/models/conv_decoder_base.yaml"
+dataset_config_path: "configs/data/cmu_debug.yaml"
 dataloader_config:
-  bs_per_gpu: 1
-  workers_per_gpu: 8
+  bs_per_gpu: 8
+  workers_per_gpu: 4
   prefetch_factor: 2
 rgb_preprocessor_config: 
   model_vision_type: "dinov2"
@@ -18,5 +18,5 @@ training_config:
   gradient_accumulation_steps: 2
   save_epochs: 1
   save_steps: 1000
-  save_path: "/home/v-wenhuitan/wenke_workspace/wenke_data/workspace/action_token_for_offline_rl/results"
+  save_path: "../results"
   resume_ckpt_path: null

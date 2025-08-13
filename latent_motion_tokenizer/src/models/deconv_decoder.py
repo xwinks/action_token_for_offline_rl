@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
-
+import numpy as np
+import math
 def silu(x):
     return x*torch.sigmoid(x)
 
@@ -120,7 +121,7 @@ class MotionGuidedImageDecoder(nn.Module):
             self.attention = nn.MultiheadAttention(embed_dim=motion_dim * 2, num_heads=2, batch_first=True)
 
         
-        self.image_decoder = ImageDecoder(in_dim + attn_dim * n_motion_tokens, n_hiddens, 
+        self.image_decoder = ImageDecoder(in_dim + attn_dim, n_hiddens, 
                 n_times_upsample, norm_type = norm_type, padding_type = padding_type, use_14_patch_decoder = use_14_patch_decoder)
         
     
@@ -132,23 +133,25 @@ class MotionGuidedImageDecoder(nn.Module):
         if language_features is not None:
             language_features = self.language_proj(language_features)
             language_features = language_features.unsqueeze(1).expand(-1, N, -1)
-            attn_query = torch.cat([language_features, motion_tokens], dim=-1)
+            attn_value = torch.cat([language_features, motion_tokens], dim=-1)
         else:
-            attn_query = motion_tokens
+            attn_value = motion_tokens
             
         vision_attn_input = self.vision_proj(vision_tokens)
-        vision_attn_output = self.attention(attn_query, vision_attn_input, vision_attn_input)[0]
+        vision_attn_output = self.attention(vision_attn_input, attn_value, attn_value)[0]
         B,N_Tokens,D = vision_tokens.shape
         vision_attn_output = vision_attn_output.view(B, N_Tokens, -1)
         
-        print("the attn query shape is: ", attn_query.shape)
-        print("the vision attn input shape is: ", vision_attn_input.shape)
+        # print("the attn query shape is: ", attn_value.shape)
+        # print("the vision attn input shape is: ", vision_attn_input.shape)
         # print("the vision attn output shape is: ", vision_attn_output.shape)
         
         x = torch.cat([vision_tokens, vision_attn_output], dim=-1)
-        print("the x shape is: ", x.shape)
-        print("the vision tokens shape is: ", vision_tokens.shape)
-        print("the vision attn output shape is: ", vision_attn_output.shape)
+        # print("the x shape is: ", x.shape)
+        # print("the vision tokens shape is: ", vision_tokens.shape)
+        # print("the vision attn output shape is: ", vision_attn_output.shape)
+        x = x.permute(0, 2, 1)
+        x = x.reshape(B, -1, int(math.sqrt(N_Tokens)), int(math.sqrt(N_Tokens)))
         x = self.image_decoder(x)
         return x
         

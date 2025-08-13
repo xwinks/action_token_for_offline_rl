@@ -4,3 +4,5 @@ results/
 **/visualization/
 **/checkpoints/
 **/logs/
+**/*results/
+**/moto_results/
