@@ -1,0 +1,56 @@
+description: Single GPU example job from GCR
+
+env_defaults:
+  NODES: 1 # The number of nodes you want to use
+  GPUS: 1 # number of gpus per node
+  MEM: 80 # gpu memory of each gpu, not important
+
+target:
+  service: sing
+  workspace_name: wsgcrrbt
+  name: msrresrchlab
+
+storage: # mount the storage container
+  my_output:
+    storage_account_name: azsussc
+    container_name: v-dihu
+    mount_dir: /mnt/dihu
+  data:
+    storage_account_name: azsussc
+    container_name: v-wangxiaofa
+    mount_dir: /mnt/robot_data
+    is_output: false
+
+environment:
+  image: amlt-sing/acpt-torch2.6.0-py3.10-cuda12.6-ubuntu22.04
+  setup:
+  # - bash install_ffmpeg.sh 
+  - bash install_env.sh
+
+code:
+  local_dir: $CONFIG_DIR/submit/offline_rl_for_vla
+
+data:
+  storage_id: data
+
+
+jobs:
+- name: dihu_action_token_training_on_bridge_single
+  sku: ${MEM}G${GPUS}-A100
+  mpi: False
+  process_count_per_node: ${GPUS}
+  command:
+  - bash scripts/train_lerobot_latent_motion_tokenizer_on_calvin_debug.sh
+  # - sleep 10000000
+  sla_tier: Premium
+  execution_mode: basic
+  priority: medium
+  azml_int: True
+
+  identity: managed
+  submit_args:
+    env:
+      AMLT_DOCKERFILE_TEMPLATE: default
+      _AZUREML_SINGULARITY_JOB_UAI: /subscriptions/3289a5dd-b901-4b63-9562-bbbdfffba9de/resourcegroups/ws/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wsgcrrbt-identity
+      SHARED_MEMORY_PERCENT: 0.5 # value in [0,1], change if necessary, shared memory size
+

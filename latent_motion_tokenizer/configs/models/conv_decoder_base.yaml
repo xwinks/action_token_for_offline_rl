@@ -1,0 +1,51 @@
+_target_: latent_motion_tokenizer.src.models.deconv_latent_motion_tokenizer.DeconvLatentMotionTokenizer
+codebook_dim: 32
+commit_loss_w: 1.0
+recon_loss_w: 1.0
+perceptual_loss_w: 1.0
+
+image_encoder:
+  _target_: latent_motion_tokenizer.src.models.timm_dinov2_model.TimmDinoV2VsionEncoder
+
+m_former:
+  _target_: latent_motion_tokenizer.src.models.m_former.MFormer
+  add_pooling_layer: false
+  config:
+    _target_: transformers.ViTConfig
+    query_num: 8
+    input_hidden_size: 1024
+    num_patches: 256 # include the [CLS] token
+    attention_probs_dropout_prob: 0.0
+    hidden_act: "gelu"
+    hidden_dropout_prob: 0.0
+    hidden_size: 1024
+    initializer_range: 0.02
+    intermediate_size: 3072
+    layer_norm_eps: 1e-12
+    model_type: "vit"
+    num_attention_heads: 16
+    num_hidden_layers: 4
+    qkv_bias: true
+
+vector_quantizer:
+  _target_: latent_motion_tokenizer.src.models.vector_quantizer.VectorQuantizer2
+  n_e: 128
+  e_dim: 32
+  beta: 0.25
+  remap: null
+  sane_index_shape: true
+
+decoder:
+  _target_: latent_motion_tokenizer.src.models.deconv_decoder.MotionGuidedImageDecoder
+  use_14_patch_decoder: true
+  in_dim: 1024
+  n_hiddens: 128
+  n_times_upsample: 4
+  motion_dim: 32
+  n_motion_tokens: 16
+  image_encoder:
+    _target_: latent_motion_tokenizer.src.models.timm_dinov2_model.TimmDinoV2VsionEncoder
+  langauge_dim: null
+  norm_type: "group"
+  padding_type: "replicate"
+

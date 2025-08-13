@@ -1,0 +1,28 @@
+action_prediction_transformer_config_path: "configs/models/action_prediction.yaml"
+dataset_config_path: "configs/data/cmu_for_action_prediction.yaml"
+dataloader_config:
+  bs_per_gpu: 64
+  workers_per_gpu: 4
+  prefetch_factor: 2
+rgb_preprocessor_config: 
+  model_vision_type: "mae"
+  vision_aug_config: 
+    do_random_resized_crop: false
+    do_random_shift: true
+training_config:
+  save_path: "outputs/moto_gpt_pretrained_on_cmu"
+  save_epochs: 10
+  save_steps: 10000
+  num_epochs: 20
+  print_steps: 100
+  lr_max: 0.0001
+  weight_decay: 0.0001
+  num_warmup_epochs: 1
+  gradient_accumulation_steps: 4
+  resume_ckpt_path: null
+  max_epoch: 10
+  bs_per_gpu: 64
+  obs_name: "observation.images.image"
+lang_tokenizer:
+  _target_: transformers.T5Tokenizer.from_pretrained
+  pretrained_model_name_or_path: "t5-base"

@@ -1,0 +1,8 @@
+fps: 5
+repo_id: pizza
+root: /home/v-wenhuitan/wenke_workspace/wenke_data/workspace/real_robot/single_step_generated_lerobot_dataset/5
+camera_key: observation.images.right_rgb
+delta_timestamps:
+  observation.images.right_rgb: [-1, 0]
+  observation.state: [-1, 0]
+  action: [-1, 0]

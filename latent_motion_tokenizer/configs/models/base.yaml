@@ -1,0 +1,60 @@
+_target_: latent_motion_tokenizer.src.models.latent_motion_tokenizer.LatentMotionTokenizer
+codebook_dim: 32
+commit_loss_w: 1.0
+recon_loss_w: 1.0
+perceptual_loss_w: 1.0
+
+image_encoder:
+  _target_: transformers.ViTMAEModel.from_pretrained
+  pretrained_model_name_or_path: "facebook/vit-mae-large"
+
+m_former:
+  _target_: latent_motion_tokenizer.src.models.m_former.MFormer
+  add_pooling_layer: false
+  config:
+    _target_: transformers.ViTConfig
+    query_num: 8
+    input_hidden_size: 1024
+    num_patches: 197 # include the [CLS] token
+    attention_probs_dropout_prob: 0.0
+    hidden_act: "gelu"
+    hidden_dropout_prob: 0.0
+    hidden_size: 768
+    initializer_range: 0.02
+    intermediate_size: 3072
+    layer_norm_eps: 1e-12
+    model_type: "vit"
+    num_attention_heads: 12
+    num_hidden_layers: 4
+    qkv_bias: true
+
+vector_quantizer:
+  _target_: latent_motion_tokenizer.src.models.vector_quantizer.VectorQuantizer2
+  n_e: 128
+  e_dim: 32
+  beta: 0.25
+  remap: null
+  sane_index_shape: true
+
+decoder:
+  _target_: latent_motion_tokenizer.src.models.latent_motion_decoder.LatentMotionDecoder
+  config:
+    _target_: transformers.ViTConfig
+    query_num: 8
+    attention_probs_dropout_prob: 0.0
+    hidden_act: "gelu"
+    hidden_dropout_prob: 0.0
+    hidden_size: 768
+    image_size: 224
+    initializer_range: 0.02
+    intermediate_size: 3072
+    layer_norm_eps: 1e-12
+    model_type: "vit"
+    num_attention_heads: 12
+    num_channels: 3
+    num_hidden_layers: 12
+    patch_size: 16
+    qkv_bias: true
+    encoder_stride: 16
+    num_patches: 196
+  # image_token_encoder:

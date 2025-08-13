@@ -1,0 +1,14 @@
+latent_motion_tokenizer_config_path: "configs/models/base.yaml"
+dataset_config_path: "configs/data/bridge.yaml"
+dataloader_config:
+  bs_per_gpu: 512
+  workers_per_gpu: 8
+  prefetch_factor: 2
+rgb_preprocessor_config: 
+  model_vision_type: "mae"
+  vision_aug_config: 
+    do_random_resized_crop: false
+    do_random_shift: true
+
+resume_ckpt_path: "ckpts"
+save_dir: "debug_pesudo_label"

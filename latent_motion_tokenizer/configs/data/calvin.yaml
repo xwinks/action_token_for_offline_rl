@@ -1,0 +1,4 @@
+data_type: "video_npz"
+npz_dir: "/group/40007/public_datasets/calvin_dataset/task_ABC_D/" 
+rgb_shape: [200, 200]
+skip_frame: 5

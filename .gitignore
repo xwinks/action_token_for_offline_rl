@@ -1,0 +1,6 @@
+results/
+**/outputs/
+**/ckpts/
+**/visualization/
+**/checkpoints/
+**/logs/

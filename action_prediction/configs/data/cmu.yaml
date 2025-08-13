@@ -1,0 +1,9 @@
+fps: 5
+repo_id: bridge
+root: /home/v-wenhuitan/wenke_workspace/wenke_data/workspace/action_token_for_offline_rl/lerobot_openx/xwk_debug_cmu_stretch_lerobot
+camera_key: observation.images.image
+delta_timestamps:
+  observation.images.image: [0]
+  observation.state: [0]
+  action: [0]
+  generated_latent_motion_ids: [0]

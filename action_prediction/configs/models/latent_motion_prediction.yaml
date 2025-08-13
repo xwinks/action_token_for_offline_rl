@@ -1,0 +1,31 @@
+_target_: action_prediction.src.models.motogpt.MotoGPT
+model_lang: 
+  _target_: transformers.T5EncoderModel.from_pretrained
+  pretrained_model_name_or_path: "t5-base"
+model_vision: 
+  _target_: moto_gpt.src.models.mae_model.MaeEncoder
+  use_obs_feature: true
+  pretrained_model_name_or_path: "facebook/vit-mae-large"
+model_causal_transformer:
+  _target_: moto_gpt.src.models.trajectory_gpt2.GPT2Model
+  config: 
+    _target_: moto_gpt.src.models.trajectory_gpt2.GPT2Config
+    vocab_size: 1
+    n_embd: 768
+    n_layer: 12
+    n_head: 12
+    activation_function: "relu"
+    dropout: 0.1
+    n_positions: 1024
+
+
+
+hidden_size: 768
+num_patch: 196
+num_latent_motion: 8
+latent_motion_codebook_size: 128
+image_feat_dim: 1024
+patch_feat_dim: 1024
+language_feat_dim: 768
+freeze_lang: true
+freeze_vision: true

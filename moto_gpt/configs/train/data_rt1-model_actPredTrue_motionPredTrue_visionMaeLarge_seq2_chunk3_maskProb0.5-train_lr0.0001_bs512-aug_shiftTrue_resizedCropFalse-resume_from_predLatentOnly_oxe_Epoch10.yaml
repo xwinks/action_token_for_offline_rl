@@ -1,0 +1,25 @@
+moto_gpt_config_path: "/group/40101/milkcychen/Moto/moto_gpt/configs/models/actPredTrue_motionPredTrue_visionMaeLarge_seq2_chunk3_maskProb0.5.yaml"
+latent_motion_tokenizer_path: "/group/40101/milkcychen/Moto/latent_motion_tokenizer/checkpoints/latent_motion_tokenizer_trained_on_oxe"
+dataset_config_path: "/group/40101/milkcychen/Moto/moto_gpt/configs/data/rt1.yaml"
+dataloader_config:
+  bs_per_gpu: 32
+  workers_per_gpu: 7
+  prefetch_factor: 2
+rgb_preprocessor_config: 
+  model_vision_type: "mae"
+  vision_aug_config: 
+    do_random_resized_crop: false
+    do_random_shift: true
+training_config:
+  num_epochs: 20
+  num_warmup_epochs: 1
+  print_steps: 100
+  lr_max: 0.0001
+  weight_decay: 0.0001
+  gradient_accumulation_steps: 4
+  save_epochs: 1
+  save_steps: 10000
+  save_path: "/group/40101/milkcychen/Moto/moto_gpt/outputs/moto_gpt_finetuned_on_rt1/data_rt1-model_actPredTrue_motionPredTrue_visionMaeLarge_seq2_chunk3_maskProb0.5-train_lr0.001_bs512-aug_shiftTrue_resizedCropFalse-resume_from_predLatentOnly_oxe_Epoch10"
+  resume_ckpt_path: "/group/40101/milkcychen/Moto/moto_gpt/checkpoints/moto_gpt_pretrained_on_oxe/"
+  max_epoch: 3
+  pred_binary_gripper_action: false
