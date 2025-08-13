@@ -1,0 +1,55 @@
+description: VQVAR training on bridge
+
+env_defaults:
+  NODES: 1 # The number of nodes you want to use
+  GPUS: 2 # number of gpus per node
+  MEM: 40 # gpu memory of each gpu, not important
+
+target:
+  service: sing
+  workspace_name: wsgcrrbt
+  name: msrresrchlab
+
+storage: # mount the storage container
+  my_output:
+    storage_account_name: azsussc
+    container_name: v-dihu
+    mount_dir: /mnt/dihu
+  data:
+    storage_account_name: azsussc
+    container_name: v-wangxiaofa
+    mount_dir: /mnt/robot_data
+    is_output: false
+
+environment:
+  image: amlt-sing/acpt-torch2.7.0-py3.10-cuda11.8-ubuntu22.04
+  setup:
+  # - bash install_ffmpeg.sh 
+  - bash dep_env/install_env.sh
+
+code:
+  local_dir: $CONFIG_DIR/../
+
+data:
+  storage_id: data
+
+
+jobs:
+- name: debug_3
+  sku: ${MEM}G${GPUS}-A100
+  mpi: False
+  process_count_per_node: ${GPUS}
+  command:
+  - sleep 100000
+  sla_tier: Premium
+  execution_mode: basic
+  priority: medium
+  azml_int: True
+
+  identity: managed
+  submit_args:
+    env:
+      AMLT_DOCKERFILE_TEMPLATE: default
+      _AZUREML_SINGULARITY_JOB_UAI: /subscriptions/3289a5dd-b901-4b63-9562-bbbdfffba9de/resourcegroups/ws/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wsgcrrbt-identity
+      SHARED_MEMORY_PERCENT: 0.5 # value in [0,1], change if necessary, shared memory size
+
