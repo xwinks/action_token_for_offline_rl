@@ -2,6 +2,7 @@ import pyrootutils
 pyrootutils.setup_root(__file__, indicator='.project-root', pythonpath=True, dotenv=True)
 import argparse
 import json
+import os
 from torch.utils.data import DataLoader
 import omegaconf
 import hydra
@@ -9,7 +10,7 @@ from functools import partial
 from transformers import AutoTokenizer
 from common.models.model_utils import load_model
 from common.processors.preprocessor_utils import get_rgb_preprocessor
-from latent_motion_tokenizer.src.trainers.latent_motion_tokenizer_trainer import LatentMotionTokenizer_Trainer
+from latent_motion_tokenizer.src.trainers.deepspeed_latent_motion_tokenizer_trainer import LatentMotionTokenizer_Trainer
 from torch.utils.data import DataLoader
 from functools import partial
 from common.data.data_utils import load_dataset
@@ -90,6 +91,8 @@ def main(cfg):
         eval_dataloader=eval_dataloader,
         bs_per_gpu=cfg['dataloader_config']['bs_per_gpu'],
         obs_name = camera_key,
+        use_deepspeed=True,
+        deepspeed_config_path=cfg['deepspeed_config_path'],
         **cfg['training_config']
     )
 
@@ -99,7 +102,8 @@ def main(cfg):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_path', type=str, default="/group/40101/milkcychen/Moto/latent_motion_tokenizer/configs/train/data_calvin-vq_size128_dim32_num8_legacyTrue-vision_MaeLarge-decoder_queryFusionModeAdd_Patch196_useMaskFalse-mformer_legacyTrue-train_lr0.0001_bs256-aug_shiftTrue_resizedCropFalse.yaml")
-    args = parser.parse_args()
+    parser.add_argument('--local_rank', type=int, default=-1)
+    args, _ = parser.parse_known_args()
 
     cfg = omegaconf.OmegaConf.load(args.config_path)
     print(f"the cfg is: {cfg}")

@@ -61,7 +61,8 @@ def main(cfg):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config_path', type=str, default="/group/40101/milkcychen/Moto/latent_motion_tokenizer/configs/train/data_calvin-vq_size128_dim32_num8_legacyTrue-vision_MaeLarge-decoder_queryFusionModeAdd_Patch196_useMaskFalse-mformer_legacyTrue-train_lr0.0001_bs256-aug_shiftTrue_resizedCropFalse.yaml")
-    args = parser.parse_args()
+    parser.add_argument('--local_rank', type=int, default=-1)
+    args, _ = parser.parse_known_args()
 
     cfg = omegaconf.OmegaConf.load(args.config_path)
     main(cfg)

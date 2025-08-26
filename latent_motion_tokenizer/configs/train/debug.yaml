@@ -1,7 +1,8 @@
+deepspeed_config_path: "configs/deepspeed/ds_zero2.json"
 latent_motion_tokenizer_config_path: "configs/models/base.yaml"
 dataset_config_path: "configs/data/cmu_debug.yaml"
 dataloader_config:
-  bs_per_gpu: 8
+  bs_per_gpu: 1
   workers_per_gpu: 4
   prefetch_factor: 2
 rgb_preprocessor_config: 

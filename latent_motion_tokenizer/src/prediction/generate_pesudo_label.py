@@ -5,8 +5,6 @@ from time import time
 import torch
 import torch.nn.functional as F
 from transformers import get_cosine_schedule_with_warmup
-from accelerate import Accelerator
-from accelerate.utils import DistributedDataParallelKwargs
 from torch.utils.tensorboard import SummaryWriter
 import torch
 from common.data.datasets import DataPrefetcher
