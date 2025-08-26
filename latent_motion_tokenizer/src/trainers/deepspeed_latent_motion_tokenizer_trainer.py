@@ -43,6 +43,7 @@ class LatentMotionTokenizer_Trainer:
         obs_name="rgb_initial",
         use_deepspeed=False,
         deepspeed_config_path=None,
+        
     ):
         if resume_ckpt_path is not None:
             print(f"resuming Latent Motion Tokenizer from {resume_ckpt_path} ...")
@@ -60,6 +61,10 @@ class LatentMotionTokenizer_Trainer:
         self.world_size = dist.get_world_size()
         self.local_rank = int(os.environ.get('LOCAL_RANK', 0))
         torch.cuda.set_device(self.local_rank)
+        
+        print("self.local_rank: ", self.local_rank)
+        print("self.rank: ", self.rank)
+        print("self.world_size: ", self.world_size)
         self._device = torch.device('cuda', self.local_rank)
 
         total_prints_per_epoch = len(train_dataloader.dataset) // (print_steps * bs_per_gpu * self.world_size)

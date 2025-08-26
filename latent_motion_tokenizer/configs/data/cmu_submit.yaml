@@ -1,0 +1,8 @@
+fps: 5
+repo_id: bridge
+root: /mnt/robot_data/robot_dataset/lerobot-format/cmu_stretch_lerobot/
+camera_key: observation.images.image
+delta_timestamps:
+  observation.images.image: [-1, 0]
+  observation.state: [-1, 0]
+  action: [-1, 0]

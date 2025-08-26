@@ -8,7 +8,7 @@ env_defaults:
 target:
   service: sing
   workspace_name: wsgcrrbt
-  name: msrresrchlab
+  name: msroctovc
 
 storage: # mount the storage container
   my_output:
@@ -22,8 +22,7 @@ storage: # mount the storage container
     is_output: false
 
 environment:
-  # image: amlt-sing/acpt-torch2.7.0-py3.10-cuda11.8-ubuntu22.04
-  image: amlt-sing/acpt-torch2.6.0-py3.10-cuda12.6-ubuntu22.04
+  image: amlt-sing/acpt-torch2.7.1-py3.10-cuda12.6-ubuntu22.04
   setup:
   # - bash install_ffmpeg.sh 
   - bash dep_env/install_env.sh
@@ -36,12 +35,11 @@ data:
 
 
 jobs:
-- name: debug_final
+- name: base_cmu_why
   sku: ${MEM}G${GPUS}-A100
   mpi: False
   process_count_per_node: ${GPUS}
   command:
-  # - sleep 100000
   - bash scripts/submit_scripts/deepspeed_train.sh submit_base_cmu
   sla_tier: Premium
   execution_mode: basic

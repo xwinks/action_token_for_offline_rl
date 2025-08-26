@@ -12,9 +12,9 @@ cd ..
 pip install -r requirements.txt
 pip list 
 sudo apt-get update && sudo apt-get install -y libglib2.0-0 libglib2.0-dev
-apt-get install -y libgtk2.0-dev 
+sudo apt-get install -y libgtk2.0-dev 
 pip install --upgrade torch torchvision torchaudio
-sudo apt-get install fonts-dejavu
+sudo apt-get install -y fonts-dejavu 
 conda install -y ffmpeg=7.0.1 -c conda-forge
 sudo apt install -y libavutil-dev 
 pip install datasets==4.0.0
