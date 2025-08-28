@@ -26,6 +26,7 @@ class LatentMotionTokenizer_Trainer:
         self,
         latent_motion_tokenizer,
         rgb_preprocessor,
+        ds_meta,
         train_dataloader,
         eval_dataloader,
         save_path,
@@ -52,6 +53,7 @@ class LatentMotionTokenizer_Trainer:
             print('load ', resume_ckpt_path, '\nmissing ', missing_root_keys, '\nunexpected ', unexpected_keys)
         
         self.obs_name = obs_name
+        self.ds_meta = ds_meta
         if deepspeed_config_path is None:
             raise ValueError("deepspeed_config_path must be provided for DeepSpeed training")
         # init distributed
@@ -195,12 +197,12 @@ class LatentMotionTokenizer_Trainer:
             batch, load_time = self.train_prefetcher.next()
             
             # 计算当前epoch的总批次数
-            total_batches = 0
+            total_batches = self.ds_meta.total_frames  // self.bs_per_gpu // self.world_size
             temp_batch = batch
             temp_load_time = load_time
-            while temp_batch is not None:
-                total_batches += 1
-                temp_batch, temp_load_time = self.train_prefetcher.next()
+            # while temp_batch is not None:
+            #     total_batches += 1
+            #     temp_batch, temp_load_time = self.train_prefetcher.next()
             
             # 重新初始化prefetcher
             self.train_prefetcher = DataPrefetcher(self.train_loader, self.device)
@@ -358,7 +360,7 @@ class LatentMotionTokenizer_Trainer:
             cond_pixel_values=rgb_seq[:,0],
             target_pixel_values=rgb_seq[:,1]
         )
-        print("the loss is: ", loss)
+        # print("the loss is: ", loss)
 
         return loss
 

@@ -87,6 +87,7 @@ def main(cfg):
     trainer = LatentMotionTokenizer_Trainer(
         latent_motion_tokenizer=latent_motion_tokenizer,
         rgb_preprocessor=rgb_preprocessor,
+        ds_meta = ds_meta,
         train_dataloader=train_dataloader,
         eval_dataloader=eval_dataloader,
         bs_per_gpu=cfg['dataloader_config']['bs_per_gpu'],

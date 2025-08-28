@@ -2,13 +2,13 @@ description: VQVAR training on bridge
 
 env_defaults:
   NODES: 1 # The number of nodes you want to use
-  GPUS: 8 # number of gpus per node
-  MEM: 80 # gpu memory of each gpu, not important
+  GPUS: 1 # number of gpus per node
+  MEM: 32 # gpu memory of each gpu, not important
 
 target:
   service: sing
   workspace_name: wsgcrrbt
-  name: msroctovc
+  name: msrresrchlab
 
 storage: # mount the storage container
   my_output:
@@ -35,13 +35,13 @@ data:
 
 
 jobs:
-- name: base_bridge_8_a100_80
-  sku: ${MEM}G${GPUS}-A100
+- name: base_cmu_debug_train_inference_v100
+  sku: ${MEM}G${GPUS}-V100
   mpi: False
   process_count_per_node: ${GPUS}
   command:
   # - bash scripts/submit_scripts/deepspeed_train.sh submit_base_cmu
-  - sleep 100000000
+  - sleep 10000000
   sla_tier: Premium
   execution_mode: basic
   priority: medium
